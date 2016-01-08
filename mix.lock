@@ -1,0 +1,6 @@
+%{"eenum": {:git, "https://github.com/flowforwarding/eenum.git", "c793a8e56947b560e065b86ca5829d76158e45d1", [branch: "master"]},
+  "goldrush": {:git, "git://github.com/DeadZen/goldrush.git", "71e63212f12c25827e0c1b4198d37d5d018a7fec", [tag: "0.1.6"]},
+  "lager": {:git, "https://github.com/basho/lager.git", "d33ccf3b69de09a628fe38b4d7981bb8671b8a4f", [tag: "2.1.1"]},
+  "meck": {:git, "https://github.com/eproxus/meck.git", "dde759050eff19a1a80fd854d7375174b191665d", [tag: "0.8.2"]},
+  "of_protocol": {:git, "https://github.com/FlowForwarding/of_protocol", "9408dbdfb239832583f1b086d6a9b57f426282fc", []},
+  "ranch": {:hex, :ranch, "1.2.0"}}
