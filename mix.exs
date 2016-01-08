@@ -29,6 +29,6 @@ defmodule Ofex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:ranch, "~> 1.2"},
-     {:of_protocol, git: "https://github.com/FlowForwarding/of_protocol"}]
+     {:of_proto, git: "https://github.com/luizbafilho/of_proto"}]
   end
 end

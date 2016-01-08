@@ -7,9 +7,11 @@ defmodule Ofex do
     import Supervisor.Spec, warn: false
     Logger.info("Controller Started!")
 
-    {:ok ,_} = :ranch.start_listener(:ranch_acceptor, 100, :ranch_tcp, [{:port, 6633}], Ofex.SwitchHandler, [])
+    children = [
+      worker(Ofex.SwitchHandler, [Ofex.SwitchHandler])
+    ]
 
     opts = [strategy: :one_for_one, name: Ofex.Supervisor]
-    Supervisor.start_link([], opts)
+    Supervisor.start_link(children, opts)
   end
 end
