@@ -66,7 +66,15 @@ defmodule Ofex.SwitchHandler do
   end
 
   def recv_message(socket) do
-    :gen_tcp.recv(socket, 0) |> process_data(socket)
+    {:ok, <<_, _, length::size(16), _::bitstring>> } = {:ok, header } = :gen_tcp.recv(socket, 8)
+    rest = case length - 8 do
+      0 ->
+        <<>>
+      r ->
+        {:ok, data } = :gen_tcp.recv(socket, r)
+        data
+    end
+    {:ok, header <> rest } |> process_data(socket)
   end
 
   def process_data({:ok, data}, socket) do
@@ -74,7 +82,7 @@ defmodule Ofex.SwitchHandler do
     GenServer.cast(__MODULE__, {:new_message, socket, msg})
   end
 
-  def process_data({:error, reason}, _socket) do
+  def process_data({:error, reason}, socket) do
     Logger.warn("[MESSAGE] Message error:")
     IO.inspect(reason)
   end
