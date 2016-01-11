@@ -1,3 +1,3 @@
 %{"bin_format": {:hex, :bin_format, "0.0.1"},
-  "of_proto": {:git, "https://github.com/luizbafilho/of_proto", "14dfcd3e2650df9b6b5d54a3d7f9c8ca69342684", []},
+  "of_proto": {:git, "https://github.com/luizbafilho/of_proto", "993df0ab15fc8436336f0e3a1f1567c825c91e96", []},
   "ranch": {:hex, :ranch, "1.2.0"}}
