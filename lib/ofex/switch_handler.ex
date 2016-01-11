@@ -12,9 +12,7 @@ defmodule Ofex.SwitchHandler do
   end
 
   def handle_cast({:new_switch, socket}, {}) do
-    Logger.info("New switch!")
-
-    :gen_tcp.send(socket, OfProto.encode(%Messages.Hello{}))
+    IO.puts("New switch!")
 
     spawn_link(fn -> recv_loop(socket) end)
     {:noreply, {}}
@@ -44,9 +42,10 @@ defmodule Ofex.SwitchHandler do
                                                    active: false,
                                                    reuseaddr: true,
                                                    nodelay: true])
-      Logger.info "Accepting connections on port #{port}"
+      IO.puts "Accepting connections on port #{port}"
 
       spawn_link(fn -> accept_loop(socket) end)
+
       {:ok, {}}
   end
 
@@ -66,25 +65,28 @@ defmodule Ofex.SwitchHandler do
   end
 
   def recv_message(socket) do
-    {:ok, <<_, _, length::size(16), _::bitstring>> } = {:ok, header } = :gen_tcp.recv(socket, 8)
-    rest = case length - 8 do
+    :gen_tcp.recv(socket, 8) |> process_header(socket) |> process_data(socket)
+  end
+
+  def process_header({:ok, header}, socket) do
+    <<_, _, length::size(16), _::bitstring>> = header
+    body = case length - 8 do
       0 ->
         <<>>
       r ->
         {:ok, data } = :gen_tcp.recv(socket, r)
         data
     end
-    {:ok, header <> rest } |> process_data(socket)
+    header <> body
+  end
+  def process_header({:error, reason}, socket) do
+    IO.puts("[MESSAGE] Message error:")
+    IO.inspect(reason)
   end
 
-  def process_data({:ok, data}, socket) do
+  def process_data(data, socket) do
     msg = OfProto.decode(data)
     GenServer.cast(__MODULE__, {:new_message, socket, msg})
-  end
-
-  def process_data({:error, reason}, socket) do
-    Logger.warn("[MESSAGE] Message error:")
-    IO.inspect(reason)
   end
 
   defp send_message(socket, msg) do
