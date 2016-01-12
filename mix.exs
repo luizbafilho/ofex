@@ -29,6 +29,7 @@ defmodule Ofex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:ranch, "~> 1.2"},
+     {:reagent, "~> 0.1.5"},
      {:of_proto, path: "../of_proto"}]
   end
 end
