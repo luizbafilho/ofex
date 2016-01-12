@@ -8,7 +8,8 @@ defmodule Ofex do
     Logger.info("Controller Started!")
 
     children = [
-      worker(Reagent, [Ofex.SwitchManager, [port: 6653]])
+      worker(Reagent, [Ofex.SwitchManager, [port: 6653]]),
+      worker(Ofex.Switches, [])
     ]
 
     opts = [strategy: :one_for_one, name: Ofex.Supervisor]

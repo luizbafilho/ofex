@@ -36,9 +36,11 @@ defmodule Ofex.SwitchManager do
 
   def process_msg(%M.EchoRequest{xid: xid, data: data}, conn), do: send_message(%M.EchoReply{xid: xid, data: data}, conn)
   def process_msg(%M.Hello{}, conn), do: send_message(%M.FeaturesRequest{}, conn)
-  def process_msg(%M.FeaturesReply{datapath_id: datapath_id}, conn) do
+  def process_msg(%M.FeaturesReply{datapath_id: dpi}, conn) do
     Logger.info("Features Reply")
-    Logger.info("Datpath id: #{datapath_id}")
+    Logger.info("Datpath id: #{dpi}")
+    Ofex.Switches.put(dpi, %Ofex.Switch{datapath_id: dpi})
+    IO.inspect Ofex.Switches.list
   end
   def process_msg(any, _) do
     IO.inspect(any)
