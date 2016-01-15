@@ -37,10 +37,12 @@ defmodule Ofex.SwitchManager do
   def process_msg(%M.EchoRequest{xid: xid, data: data}, conn), do: send_message(%M.EchoReply{xid: xid, data: data}, conn)
   def process_msg(%M.Hello{}, conn), do: send_message(%M.FeaturesRequest{}, conn)
   def process_msg(%M.FeaturesReply{datapath_id: dpi}, conn) do
+    Ofex.Switches.put(dpi, %Ofex.Switch{datapath_id: dpi})
+
     Logger.info("Features Reply")
     Logger.info("Datpath id: #{dpi}")
-    Ofex.Switches.put(dpi, %Ofex.Switch{datapath_id: dpi})
-    IO.inspect Ofex.Switches.list
+
+    send_message(table_miss_flow_mod, conn)
   end
   def process_msg(any, _) do
     IO.inspect(any)
@@ -48,5 +50,13 @@ defmodule Ofex.SwitchManager do
 
   def send_message(msg, conn) do
     conn |> Socket.Stream.send!(OfProto.encode(msg))
+  end
+
+  def table_miss_flow_mod do
+    match       = %M.Match{}
+    action      = %M.Actions.Output{}
+    instruction = %M.Instructions.ApplyActions{actions: [action]}
+
+    %M.FlowMod{match: match, instructions: instruction}
   end
 end

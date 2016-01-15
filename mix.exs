@@ -14,7 +14,7 @@ defmodule Ofex.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :ranch],
+    [applications: [:logger],
      mod: {Ofex, []}]
   end
 
@@ -28,8 +28,7 @@ defmodule Ofex.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:ranch, "~> 1.2"},
-     {:reagent, "~> 0.1.5"},
+    [{:reagent, "~> 0.1.5"},
      {:of_proto, path: "../of_proto"}]
   end
 end
