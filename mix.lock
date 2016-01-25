@@ -1,6 +1,7 @@
 %{"bin_format": {:hex, :bin_format, "0.0.1"},
   "exts": {:hex, :exts, "0.2.2"},
   "of_proto": {:git, "https://github.com/luizbafilho/of_proto", "993df0ab15fc8436336f0e3a1f1567c825c91e96", []},
+  "pkt": {:git, "https://github.com/msantos/pkt.git", "f21be7734da7089cec057385d728d1111694671a", []},
   "ranch": {:hex, :ranch, "1.2.0"},
   "reagent": {:hex, :reagent, "0.1.5"},
   "socket": {:hex, :socket, "0.2.8"}}

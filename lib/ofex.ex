@@ -8,7 +8,7 @@ defmodule Ofex do
     Logger.info("Controller Started!")
 
     children = [
-      worker(Reagent, [Ofex.SwitchManager, [port: 6653]]),
+      worker(Reagent, [Ofex.Driver, [port: 6653]]),
       worker(Ofex.Switches, [])
     ]
 

@@ -1,6 +1,6 @@
 require Logger
 
-defmodule Ofex.SwitchManager do
+defmodule Ofex.Driver do
   alias OfProto.Messages, as: M
   use Reagent.Behaviour
 
