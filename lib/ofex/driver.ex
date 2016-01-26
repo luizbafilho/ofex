@@ -37,15 +37,15 @@ defmodule Ofex.Driver do
   def process_msg(%M.EchoRequest{xid: xid, data: data}, conn), do: send_message(%M.EchoReply{xid: xid, data: data}, conn)
   def process_msg(%M.Hello{}, conn), do: send_message(%M.FeaturesRequest{}, conn)
   def process_msg(%M.FeaturesReply{datapath_id: dpi}, conn) do
-    Ofex.Switches.put(dpi, %Ofex.Switch{datapath_id: dpi})
-
     Logger.info("Features Reply")
     Logger.info("Datpath id: #{dpi}")
+
+    Ofex.Handler.init_handler(%Ofex.Switch{datapath_id: dpi})
 
     send_message(table_miss_flow_mod, conn)
   end
   def process_msg(any, _) do
-    IO.inspect(any)
+    Ofex.Handler.handle_message(any)
   end
 
   def send_message(msg, conn) do

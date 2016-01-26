@@ -9,7 +9,7 @@ defmodule Ofex do
 
     children = [
       worker(Reagent, [Ofex.Driver, [port: 6653]]),
-      worker(Ofex.Switches, [])
+      worker(Ofex.Handler, [])
     ]
 
     opts = [strategy: :one_for_one, name: Ofex.Supervisor]
