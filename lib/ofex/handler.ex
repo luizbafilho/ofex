@@ -14,10 +14,17 @@ defmodule Ofex.Handler do
   end
 
   def handle_cast({:init, switch}, state) do
-    {:noreply, %{state| switches: [ switch | state.switches]}}
+    state = %{state| switches: [ switch | state.switches]}
+
+    state.callback_module.init(state)
+
+    {:noreply, state}
   end
-  def handle_cast({:message, message}, state) do
-    state.callback_module.handle_message(message)
+  def handle_cast(:terminate, state) do
+    {:noreply, state}
+  end
+  def handle_cast({:message, msg, switch}, state) do
+    state.callback_module.handle_message(msg, switch)
     {:noreply, state}
   end
 
@@ -25,9 +32,8 @@ defmodule Ofex.Handler do
     {:reply, state.switches, state}
   end
 
-  def init_handler(switch), do: GenServer.cast(__MODULE__, {:init, switch})
-  def get_switches, do: GenServer.call(__MODULE__, :switches)
-  def handle_message(msg) do
-    GenServer.cast(__MODULE__, {:message, msg})
-  end
+  def init_handler(switch),         do: GenServer.cast(__MODULE__, {:init, switch})
+  def terminate,                    do: GenServer.cast(__MODULE__, :terminate)
+  def handle_message(switch, msg),  do: GenServer.cast(__MODULE__, {:message, msg, switch})
+  def get_switches,                 do: GenServer.call(__MODULE__, :switches)
 end
